@@ -41,7 +41,7 @@ public class SellProduct {
                 "," + product.getName() +
                 "," + product.getPrice() +
                 "," + sellAmount +
-                "," + totalPrice() ;
+                "," + totalPrice ;
     }
 
     public double totalPrice() {
@@ -51,8 +51,9 @@ public class SellProduct {
     @Override
     public String toString() {
         return "SellProduct{" +
-                "product=" + product +
-                ", sellAmount=" + sellAmount +
+                "name "+ product.getName() +
+                ", totalPrice= " + totalPrice() +
+                ", sellAmount= " + sellAmount +
                 '}';
     }
 

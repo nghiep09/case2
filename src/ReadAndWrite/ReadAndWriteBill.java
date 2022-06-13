@@ -9,7 +9,7 @@ import java.util.List;
 public class ReadAndWriteBill {
 
     public  void writeBill(List<SellProduct> bills) {
-        File file = new File("Bill.csv");
+        File file = new File("D:\\JAVA1\\Case1\\Bill.csv");
         try {
             FileWriter fileWriter = new FileWriter(file);
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);

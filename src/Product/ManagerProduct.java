@@ -5,6 +5,8 @@ import ReadAndWrite.ReadAndWriteBill;
 import ReadAndWrite.ReadAndWriteProduct;
 import ReadAndWrite.ReadAndWriteSellProduct;
 import ReadAndWrite.SellProduct;
+import sort.SortByPriceGiam;
+import sort.SortByPriceTang;
 import validate.ValidateProduct;
 
 import java.util.ArrayList;
@@ -26,12 +28,16 @@ public class ManagerProduct {
     SellProduct sellProduct;
 
     public void ProductMenu() {
-        System.out.println("MENU");
+        System.out.println("===Xin Chào ADMIN===");
+        System.out.println("========MENU========");
         System.out.println("1. Thêm Sản phẩm ");
         System.out.println("2. Chỉnh sửa sản phẩm ");
-        System.out.println("3. Hiển thị sản phẩm có trong cửa hàng");
-        System.out.println("4. Logout");
-        System.out.println("5. Thoát");
+        System.out.println("3. tìm kiếm sản phẩm");
+        System.out.println("4. xóa");
+        System.out.println("5. sắp xếp");
+        System.out.println("6. Hiển thị sản phẩm có trong cửa hàng");
+        System.out.println("7. Logout");
+        System.out.println("8. Thoát");
 
         int choice = Integer.parseInt(scanner.nextLine());
         switch (choice) {
@@ -42,13 +48,22 @@ public class ManagerProduct {
                 editProduct();
                 break;
             case 3:
+                search();
+                break;
+            case 4:
+                delete();
+                break;
+            case 5:
+                sort();
+                break;
+            case 6:
                 showProduct();
                 readAndWriteProduct.writeProduct(products);
                 break;
-            case 4:
+            case 7:
                 ManagerLogin.login = null;
                 break;
-            case 5:
+            case 8:
                 System.exit(0);
                 break;
 
@@ -63,16 +78,17 @@ public class ManagerProduct {
 
         return new Product(id, name, amount, price);
 
+
+
     }
 
     public void addProduct(Product product) {
         products.add(product);
 
+
 //        editSellAmount();
 //        products.add(creatProduct());
 //        readAndWriteProduct.writeProduct(products);
-
-
     }
 
     public Product editSellAmount() {
@@ -85,9 +101,55 @@ public class ManagerProduct {
                     sum += a;
                 }
             }
-            sellProducts.get(i).setSellAmount(sum);
+            System.out.println(sum);
         }
         return null;
+    }
+    public void delete() {
+        System.out.println("Nhập id cần xóa: ");
+        int id = Integer.parseInt(scanner.nextLine());
+        int index = validateProduct.getIndexId(id, products);
+        if (index != -1) {
+            products.remove(index);
+        } else {
+            System.out.println("Không có sản phẩm trùng id");
+        }
+    }
+    public void sort(){
+        System.out.println(" chọn cách sắp xếp");
+        System.out.println("1. giá tăng dần");
+        System.out.println("2. giá giảm dần");
+        int choice1 = Integer.parseInt(scanner.nextLine());
+
+        switch (choice1) {
+            case 1:
+                products.sort(new SortByPriceTang());
+                for (Product pt : products) {
+                    System.out.println(pt);
+                }
+                break;
+
+            case 2:
+                products.sort(new SortByPriceGiam());
+                for (Product pt : products) {
+                    System.out.println(pt);
+                }
+                break;
+        }
+    }
+    public void search() {
+        boolean check = false;
+        System.out.println("Nhập tên cần tìm kiếm: ");
+        String ten = scanner.nextLine();
+        for (int i = 0; i < products.size(); i++) {
+            if (products.get(i).getName().contains(ten)) {
+                System.out.println(products.get(i));
+                check = true;
+            }
+        }
+        if (!check) {
+            System.out.println("không tìm thấy tên sản phẩm");
+        }
     }
 
 
@@ -115,14 +177,17 @@ public class ManagerProduct {
     }
 
     public void sellProductMenu() {
-        System.out.println("MENU:");
+        System.out.println("===Xin Chào "+ ManagerLogin.login.getUserName()+ " đến với cửa hàng ===");
+        System.out.println("================MENU================");
         System.out.println("1. Thêm Sản phẩm vào giỏ");
         System.out.println("2. Chỉnh sửa sản phẩm có trong giỏ");
         System.out.println("3. Hiển thị sản phẩm có trong giỏ");
-        System.out.println("4. Hiển thị sản phẩm có trong cửa hàng");
-        System.out.println("5. Xuất Bill");
-        System.out.println("6. Logout");
-        System.out.println("7. Thoát");
+        System.out.println("4. Tìm kiếm sản phẩm trong cửa hàng");
+        System.out.println("5. Sắp xếp theo giá");
+        System.out.println("6. Hiển thị sản phẩm có trong cửa hàng");
+        System.out.println("7. Xuất Bill");
+        System.out.println("8. Logout");
+        System.out.println("9. Thoát");
 
         int choice = Integer.parseInt(scanner.nextLine());
         switch (choice) {
@@ -133,18 +198,23 @@ public class ManagerProduct {
                 editSellProduct();
                 break;
             case 3:
-                showSellProductforme();
+                showProductforClient();
                 break;
             case 4:
-                showProduct();
+                search();
                 break;
             case 5:
-                showBill();
+                sort();
                 break;
             case 6:
-              ManagerLogin.login =null;
+                showProduct();
                 break;
             case 7:
+                showBill();
+            case 8:
+              ManagerLogin.login =null;
+                break;
+            case 9:
                 System.exit(0);
                 break;
         }
@@ -159,7 +229,6 @@ public class ManagerProduct {
         Product product = null;
         for (int i = 0; i < products.size(); i++) {
             if ((products.get(i).getId())==id) {
-
                 if (sellAmount < products.get(i).stockAmount()) {
                     product = products.get(i);
                 } else {
@@ -183,6 +252,7 @@ public class ManagerProduct {
     }
 
     public void editSellProduct() {
+
         int id = validateProduct.validateInt(products);
         double amount = validateProduct.validateDouble("amount: ");
         for (int i = 0; i < bills.size(); i++) {
@@ -197,19 +267,11 @@ public class ManagerProduct {
         }
         readAndWriteBill.writeBill(bills);
     }
-    public void showSellProductforme(){
-            readAndWriteSellProduct.readFileSellProduct(sellProducts);
-            int totalSell = 0;
-            for (int i = 0; i < sellProducts.size(); i++) {
-                if (ManagerLogin.login.equals(sellProducts.get(i))) {
-                    System.out.println(sellProducts.get(i).toString());
-                    totalSell += sellProducts.get(i).totalPrice();
-                }
-            }
-            System.out.println("totalSell: " + totalSell);
+    public void showProductforClient() {
+        for (SellProduct st: sellProducts) {
+            System.out.println(st);
         }
-
-
+    }
     public void showBill() {
 
         double total = 0;

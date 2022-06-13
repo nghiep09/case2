@@ -15,7 +15,7 @@ public class ReadAndWriteSellProduct {
 
     public List<SellProduct> readFileSellProduct(List<SellProduct> sellProducts){
         try {
-            File file = new File("SellProduct.csv");
+            File file = new File("D:\\JAVA1\\Case1\\SellProduct.csv");
 
             BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
 
